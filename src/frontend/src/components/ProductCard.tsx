@@ -3,7 +3,6 @@ import { Crown, ShoppingCart, Zap } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import type { Product } from "../backend.d";
-import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import { useAddToCart } from "../hooks/useQueries";
 import { formatINR } from "../utils/currency";
 import CategoryBadge from "./CategoryBadge";
@@ -17,22 +16,16 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, index }: ProductCardProps) {
-  const { identity } = useInternetIdentity();
   const addToCart = useAddToCart();
   const [detailOpen, setDetailOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const isOutOfStock = product.stock === BigInt(0);
-  const isLoggedIn = !!identity;
   const ocidIndex = index + 1;
   const isLuxury = product.category === "Luxury Products";
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!isLoggedIn) {
-      toast.error("Please sign in to add items to your cart");
-      return;
-    }
     if (isOutOfStock) return;
     try {
       await addToCart.mutateAsync({
@@ -47,10 +40,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
   const handleBuyNow = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!isLoggedIn) {
-      toast.error("Please sign in to purchase");
-      return;
-    }
     if (isOutOfStock) return;
     setCheckoutOpen(true);
   };

@@ -1,51 +1,26 @@
 # GlowShop
 
 ## Current State
-The app has a working e-commerce backend (Motoko) with:
-- Product CRUD (admin only), categories, cart (per-user), user profiles
-- Authorization component (role-based: admin, user)
-- Sample products across Skin Care, Hair Care, Makeup, Body Care, Fragrance categories
-- Prices stored as Nat (paise/rupees integer)
-
-Frontend has basic product listing, cart drawer, checkout flow, product detail modal, and admin panel.
+- Add to Cart and Buy Now buttons require login; show error toast if not logged in
+- Shop name "Glow Shop" in header is plain text with no visual glow effect
+- Admin Panel link in header is only visible when user is logged in AND is admin
+- Cart sheet shows "Sign in to view your cart" when not logged in
 
 ## Requested Changes (Diff)
 
 ### Add
-- Homepage hero section featuring luxury products prominently (lipstick, Vitamin C face wash, premium items)
-- Full category navigation: Skincare, Haircare, Personal Care, Beauty, Luxury Products, Makeup, Fragrance, Body Care
-- "Luxury Products" as a dedicated category in seed data and filter
-- "Personal Care" category with relevant products
-- "Beauty" category with relevant products
-- Real product images (generated) used directly in the frontend for each sample product
-- Prominent Buy Now + Add to Cart buttons on every product card
-- Product description visible below each product card
-- Header: Settings dropdown (Sign In / Login options), Cart icon, Admin Panel link
-- Admin Panel: full management page — add product (name, description, price, category, image URL), edit, delete
-- Prices displayed with ₹ symbol throughout (shop, cart, checkout, admin)
-- Search bar in the header
-- Featured/sale products section on homepage
-- Responsive, polished UI similar to real e-commerce sites
+- Glow/shimmer effect on the "Glow Shop" logo text in the header
 
 ### Modify
-- Seed data: update categories to include Skincare, Haircare, Personal Care, Beauty, Luxury Products in addition to existing ones
-- Update sample products to include luxury items (lipstick, Vitamin C face wash, premium serums, perfumes)
-- Category filter bar to show all new categories
-- Header redesign: include logo, search, settings, cart, admin link
+- Remove login requirement from Add to Cart button — guests can add to cart freely
+- Remove login requirement from Buy Now button — guests can proceed to checkout freely
+- Make Admin Panel link always visible in header (not gated by login), so admin can click it and log in from there
+- Cart sheet: allow viewing/managing guest cart items without requiring sign-in
 
 ### Remove
-- Broken placeholder image URLs (replace with generated images or placeholder service)
+- Toast errors that block cart actions for non-logged-in users
 
 ## Implementation Plan
-1. Generate hero and product images for luxury/featured items
-2. Update frontend App.tsx and components to implement:
-   - Hero banner showing luxury products
-   - Category filter bar with all categories
-   - Product grid with description, Buy Now, Add to Cart
-   - Header with logo, search, settings dropdown (Sign In/Login), cart, Admin link
-   - Admin panel page (add/edit/delete products)
-   - ₹ currency throughout
-   - Product detail modal
-   - Cart drawer with checkout
-3. Use backend APIs as-is (getAllProducts, addProduct, updateProduct, deleteProduct, addToCart, etc.)
-4. Wire authorization for admin panel and user cart
+1. In `ProductCard.tsx`: Remove `isLoggedIn` guard from `handleAddToCart` and `handleBuyNow`. Allow all users to add to cart and open checkout regardless of login state.
+2. In `Header.tsx`: Remove `isAdmin` condition from the Admin Panel button — always show it in the header. Add a CSS glow/shimmer animation to the "Glow Shop" text.
+3. In `CartSheet.tsx`: Remove the "sign in to view cart" wall — show cart contents to all users. Keep the sign-in option as optional.

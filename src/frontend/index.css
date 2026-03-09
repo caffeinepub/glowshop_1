@@ -234,6 +234,12 @@
     box-shadow: 0 0 30px oklch(0.50 0.20 8 / 0.25);
   }
 
+  /* Glow Shop logo shimmer animation */
+  @keyframes glowShimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
   /* Grain texture overlay */
   .grain-overlay::after {
     content: '';

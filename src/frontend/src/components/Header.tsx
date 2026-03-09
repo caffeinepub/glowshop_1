@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import type { Page } from "../App";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
-import { useGetCart, useIsAdmin } from "../hooks/useQueries";
+import { useGetCart } from "../hooks/useQueries";
 
 interface HeaderProps {
   onCartClick: () => void;
@@ -40,7 +40,6 @@ export default function Header({
 }: HeaderProps) {
   const { login, clear, identity, isLoggingIn } = useInternetIdentity();
   const { data: cartItems } = useGetCart();
-  const { data: isAdmin } = useIsAdmin();
 
   const cartCount =
     cartItems?.reduce((sum, item) => sum + Number(item.quantity), 0) ?? 0;
@@ -59,7 +58,19 @@ export default function Header({
           <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-primary-foreground" />
           </div>
-          <span className="font-display text-xl font-semibold text-foreground tracking-tight hidden sm:block">
+          <span
+            className="font-display text-xl font-semibold tracking-tight hidden sm:block glow-shop-text"
+            style={{
+              background:
+                "linear-gradient(90deg, #f472b6 0%, #fde68a 40%, #fb923c 60%, #f472b6 100%)",
+              backgroundSize: "200% auto",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              animation: "glowShimmer 2.5s linear infinite",
+              filter: "drop-shadow(0 0 6px rgba(251,146,60,0.5))",
+            }}
+          >
             Glow Shop
           </span>
         </button>
@@ -90,22 +101,20 @@ export default function Header({
         {/* Right Actions */}
         <div className="flex items-center gap-1.5 flex-shrink-0">
           {/* Admin Panel Link */}
-          {isAdmin && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onNavigate("admin")}
-              data-ocid="header.admin_link"
-              className={`hidden md:flex items-center gap-1.5 text-xs font-medium transition-colors ${
-                currentPage === "admin"
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <ShieldCheck className="w-4 h-4" />
-              Admin Panel
-            </Button>
-          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onNavigate("admin")}
+            data-ocid="header.admin_link"
+            className={`hidden md:flex items-center gap-1.5 text-xs font-medium transition-colors ${
+              currentPage === "admin"
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4" />
+            Admin Panel
+          </Button>
 
           {/* Cart */}
           <button
@@ -155,16 +164,14 @@ export default function Header({
                       </div>
                     </div>
                   </div>
-                  {isAdmin && (
-                    <DropdownMenuItem
-                      onClick={() => onNavigate("admin")}
-                      data-ocid="header.admin_link"
-                      className="flex items-center gap-2 text-sm cursor-pointer"
-                    >
-                      <ShieldCheck className="w-4 h-4 text-primary" />
-                      Admin Panel
-                    </DropdownMenuItem>
-                  )}
+                  <DropdownMenuItem
+                    onClick={() => onNavigate("admin")}
+                    data-ocid="header.admin_link"
+                    className="flex items-center gap-2 text-sm cursor-pointer"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-primary" />
+                    Admin Panel
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={clear}

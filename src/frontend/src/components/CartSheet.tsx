@@ -111,28 +111,7 @@ export default function CartSheet({ open, onOpenChange }: CartSheetProps) {
             </SheetTitle>
           </SheetHeader>
 
-          {!isLoggedIn ? (
-            <div className="flex-1 flex flex-col items-center justify-center gap-5 px-6 py-12 text-center">
-              <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center">
-                <ShoppingBag className="w-10 h-10 text-muted-foreground" />
-              </div>
-              <div>
-                <p className="font-display text-lg font-semibold text-foreground">
-                  Sign in to view your cart
-                </p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Your saved items will appear here after signing in
-                </p>
-              </div>
-              <Button
-                onClick={login}
-                disabled={isLoggingIn}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground w-full"
-              >
-                {isLoggingIn ? "Signing in…" : "Sign In"}
-              </Button>
-            </div>
-          ) : cartWithProducts.length === 0 ? (
+          {cartWithProducts.length === 0 ? (
             <div
               data-ocid="cart.empty_state"
               className="flex-1 flex flex-col items-center justify-center gap-5 px-6 py-12 text-center"
@@ -154,6 +133,19 @@ export default function CartSheet({ open, onOpenChange }: CartSheetProps) {
               >
                 Continue Shopping
               </Button>
+              {!isLoggedIn && (
+                <p className="text-xs text-muted-foreground">
+                  <button
+                    type="button"
+                    onClick={login}
+                    disabled={isLoggingIn}
+                    className="underline hover:text-foreground transition-colors"
+                  >
+                    {isLoggingIn ? "Signing in…" : "Sign in"}
+                  </button>{" "}
+                  to save your cart across devices
+                </p>
+              )}
             </div>
           ) : (
             <>
